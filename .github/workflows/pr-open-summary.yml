@@ -1,0 +1,59 @@
+name: PR Open Summary
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - stage
+      - prod
+
+jobs:
+  pr-open-stage:
+    if: github.base_ref == 'stage'
+    runs-on: ubuntu-latest
+    environment: stage
+    steps:
+      - name: Echo message
+        run: echo "PR opened for ${GITHUB_BASE_REF} from ${GITHUB_HEAD_REF}"
+      - name: Echo stage env var
+        env:
+          STAGE_ENV_SAMPLE: ${{ vars.STAGE_ENV_SAMPLE }}
+        run: |
+          echo "Stage env var: ${STAGE_ENV_SAMPLE}"
+      - name: Write summary
+        env:
+          STAGE_ENV_SAMPLE: ${{ vars.STAGE_ENV_SAMPLE }}
+        run: |
+          {
+            echo "## PR Opened"
+            echo ""
+            echo "- Base: \`${GITHUB_BASE_REF}\`"
+            echo "- Head: \`${GITHUB_HEAD_REF}\`"
+            echo "- PR: #${{ github.event.pull_request.number }}"
+            echo "- Stage env var: \`${STAGE_ENV_SAMPLE}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+  pr-open-prod:
+    if: github.base_ref == 'prod'
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Echo message
+        run: echo "PR opened for ${GITHUB_BASE_REF} from ${GITHUB_HEAD_REF}"
+      - name: Echo prod env var
+        env:
+          PROD_ENV_SAMPLE: ${{ vars.PROD_ENV_SAMPLE }}
+        run: |
+          echo "Prod env var: ${PROD_ENV_SAMPLE}"
+      - name: Write summary
+        env:
+          PROD_ENV_SAMPLE: ${{ vars.PROD_ENV_SAMPLE }}
+        run: |
+          {
+            echo "## PR Opened"
+            echo ""
+            echo "- Base: \`${GITHUB_BASE_REF}\`"
+            echo "- Head: \`${GITHUB_HEAD_REF}\`"
+            echo "- PR: #${{ github.event.pull_request.number }}"
+            echo "- Prod env var: \`${PROD_ENV_SAMPLE}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
