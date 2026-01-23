@@ -1,5 +1,4 @@
 # gatekeeper-demo
-<<<<<<< HEAD
 Gatekeeper Demo.
 =======
 Gatekeeper demo for GitHub Actions environment gates and required reviewers.
@@ -25,4 +24,3 @@ Gatekeeper demo for GitHub Actions environment gates and required reviewers.
 1. Open a PR targeting `stage` or `prod` to show environment gating + run summary.
 2. Close or merge the PR to show the close summary.
 3. Manually run "Manual Environment Gate" and select an environment to trigger approvals.
->>>>>>> 3e8c217 (gatekeeper testing)
