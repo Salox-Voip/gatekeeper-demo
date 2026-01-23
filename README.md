@@ -1,4 +1,3 @@
-# gatekeeper-demo
 Gatekeeper Demo.
 =======
 Gatekeeper demo for GitHub Actions environment gates and required reviewers.
