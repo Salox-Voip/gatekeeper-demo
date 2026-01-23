@@ -1,0 +1,24 @@
+name: PR Close Summary
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - stage
+      - prod
+
+jobs:
+  pr-close:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write summary
+        run: |
+          {
+            echo "## PR Closed"
+            echo ""
+            echo "- Base: \`${GITHUB_BASE_REF}\`"
+            echo "- Head: \`${GITHUB_HEAD_REF}\`"
+            echo "- Merged: \`${{ github.event.pull_request.merged }}\`"
+            echo "- PR: #${{ github.event.pull_request.number }}"
+          } >> "$GITHUB_STEP_SUMMARY"

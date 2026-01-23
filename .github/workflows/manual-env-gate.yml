@@ -1,0 +1,48 @@
+name: Manual Environment Gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        required: true
+        options:
+          - stage
+          - prod
+      note:
+        description: Optional note for the run
+        type: string
+        required: false
+
+jobs:
+  approval-demo:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Echo request
+        run: echo "Manual run for ${INPUTS_ENVIRONMENT}"
+        env:
+          INPUTS_ENVIRONMENT: ${{ inputs.environment }}
+      - name: Load stage env var
+        if: inputs.environment == 'stage'
+        env:
+          ENV_SAMPLE: ${{ vars.STAGE_ENV_SAMPLE }}
+        run: echo "ENV_SAMPLE=${ENV_SAMPLE}" >> "$GITHUB_ENV"
+      - name: Load prod env var
+        if: inputs.environment == 'prod'
+        env:
+          ENV_SAMPLE: ${{ vars.PROD_ENV_SAMPLE }}
+        run: echo "ENV_SAMPLE=${ENV_SAMPLE}" >> "$GITHUB_ENV"
+      - name: Write summary
+        run: |
+          {
+            echo "## Manual Gate"
+            echo ""
+            echo "- Environment: \`${INPUTS_ENVIRONMENT}\`"
+            echo "- Note: \`${INPUTS_NOTE}\`"
+            echo "- Env sample: \`${ENV_SAMPLE}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          INPUTS_ENVIRONMENT: ${{ inputs.environment }}
+          INPUTS_NOTE: ${{ inputs.note }}
